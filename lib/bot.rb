@@ -17,6 +17,11 @@ Telegram::Bot::Client.run(token) do |bot|
         chat_id: message.chat.id,
         text: "Bye, #{message.from.first_name}"
       )
+    when '/ping'
+      bot.api.send_message(
+        chat_id: message.chat.id,
+        text: "pong"
+      )
     end
   end
 end
