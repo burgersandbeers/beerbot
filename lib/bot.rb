@@ -1,27 +1,45 @@
 # frozen_string_literal: true
 
 require 'telegram/bot'
+require_relative 'beer.rb'
 
 token = ENV['TELEGRAM_TOKEN']
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
-    case message.text
+    puts message
+    case message
     when '/start'
       bot.api.send_message(
         chat_id: message.chat.id,
-        text: "Hello, #{message.from.first_name}"
+        text: "Hola, #{message.from.first_name}"
       )
     when '/stop'
       bot.api.send_message(
         chat_id: message.chat.id,
-        text: "Bye, #{message.from.first_name}"
+        text: "Chao, #{message.from.first_name}"
       )
     when '/ping'
       bot.api.send_message(
         chat_id: message.chat.id,
-        text: "pong"
+        text: 'pong'
       )
+    when Telegram::Bot::Types::Message
+      case message.text
+      when /^beer\s+.*$/
+        query = message.text.split(' ')[1..-1].join(' ')
+        beer = Beer.new(query)
+        data = beer.execute
+        bot.api.send_message(
+          chat_id: message.chat.id,
+          text: data,
+          parse_mode: 'Markdown'
+        )
+      else
+        puts "Message @#{message.from.username}: #{message.text}"
+      end
+    when Telegram::Bot::Types::InlineQuery
+      puts "InlineQuery @#{message.from.username}: #{message.query} and #{message.id}"
     end
   end
 end
