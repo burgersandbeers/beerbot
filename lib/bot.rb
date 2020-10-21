@@ -2,6 +2,7 @@
 
 require 'telegram/bot'
 require_relative 'beer.rb'
+require_relative 'covid.rb'
 
 token = ENV['TELEGRAM_TOKEN']
 
@@ -19,11 +20,6 @@ Telegram::Bot::Client.run(token) do |bot|
         chat_id: message.chat.id,
         text: "Chao, #{message.from.first_name}"
       )
-    when '/ping'
-      bot.api.send_message(
-        chat_id: message.chat.id,
-        text: 'pong'
-      )
     when Telegram::Bot::Types::Message
       case message.text
       when /^beer\s+.*$/
@@ -34,6 +30,13 @@ Telegram::Bot::Client.run(token) do |bot|
           chat_id: message.chat.id,
           text: data,
           parse_mode: 'Markdown'
+        )
+      when /^covid/
+        covid = Covid.new
+        data = covid.execute
+        bot.api.send_message(
+          chat_id: message.chat.id,
+          text: data
         )
       else
         puts "Message @#{message.from.username}: #{message.text}"
