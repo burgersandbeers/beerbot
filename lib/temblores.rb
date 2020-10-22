@@ -3,7 +3,7 @@
 class Temblor
 	attr_reader :data
 
-	def initialize
+	def initialize(query)
 		@data = {}
 		@url = "https://api.xor.cl/sismo/?fecha=#{query}"
 	end
@@ -22,17 +22,13 @@ class Temblor
 	end
 
 	def formatted_response
+		output = ''
 		@data.each do |sismo|
-			ubicacion = sismo.geoReferencia
-			magnitud = sismo.magnitudes.magnitud
-			hora = sismo.fechaLocal
-			<<~HEREDOC
-				*Ubicación:* #{ubicacion}
-				*Hora* #{hora}
-      	*Magnitud:* #{magnitud}
-				-----------------------------------
-			HEREDOC
+			ubicacion = sismo['geoReferencia']
+			magnitud = sismo['magnitudes'][0]['magnitud']
+			hora = sismo['fechaLocal']
+			output += "*Ubicación:* #{ubicacion}\n*Hora* #{hora}\n*Magnitud:* #{magnitud}\n-----------------------------------\n"
 		end
+		output
 	end
 end
-	

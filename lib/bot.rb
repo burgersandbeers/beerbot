@@ -71,7 +71,8 @@ Telegram::Bot::Client.run(token) do |bot|
         data = temblor.execute
         bot.api.send_message(
           chat_id: message.chat.id,
-          text: data
+          text: data,
+          parse_mode: 'Markdown'
         )
       when /^saldobip\s+.*$/
         query = message.text.split(' ')[1..-1].join(' ')

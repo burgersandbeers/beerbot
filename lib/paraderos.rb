@@ -3,7 +3,7 @@
 class Paradero
   attr_reader :data
 
-  def initialize
+  def initialize(query)
     @data = {}
     @url = "https://api.xor.cl/ts/?paradero=#{query}"
   end
@@ -21,12 +21,10 @@ class Paradero
     @data = JSON.parse(response)
   end
 
-	def formatted_response
-		paradero = @data['id']
+  def formatted_response
+    paradero = @data['id']
     hora = @data['horaConsulta']
     calles = @data['descripcion']
-    <<~HEREDOC
-        Paradero #{paradero}, en calle #{calles}. Hora de consulta #{hora}
-		HEREDOC
+    "Paradero #{paradero}, en calle #{calles}. Hora de consulta #{hora}"
   end
 end
