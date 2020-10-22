@@ -4,6 +4,7 @@ require 'telegram/bot'
 require_relative 'beer.rb'
 require_relative 'covid.rb'
 require_relative 'paraderos.rb'
+require_relative 'temblor.rb'
 
 token = ENV['TELEGRAM_TOKEN']
 
@@ -43,6 +44,14 @@ Telegram::Bot::Client.run(token) do |bot|
         query = message.text.split(' ')[1..-1].join(' ')
         paradero = Paradero.new(query)
         data = paradero.execute
+        bot.api.send_message(
+          chat_id: message.chat.id,
+          text: data
+        )
+      when /^temblor\s+.*$/
+        query = message.text.split(' ')[1..-1].join(' ')
+        temblor = Temblor.new(query)
+        data = temblor.execute
         bot.api.send_message(
           chat_id: message.chat.id,
           text: data
