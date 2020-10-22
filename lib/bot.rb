@@ -4,6 +4,7 @@ require 'telegram/bot'
 require_relative 'beer.rb'
 require_relative 'covid.rb'
 require_relative 'paraderos.rb'
+require_relative 'horoscopo.rb'
 require_relative 'dato.rb'
 require_relative 'temblor.rb'
 
@@ -49,6 +50,10 @@ Telegram::Bot::Client.run(token) do |bot|
           chat_id: message.chat.id,
           text: data
         )
+      when /^horoscopo\s+.*$/
+        query = message.text.split(' ')[1..-1].join(' ')
+        horoscopo = Horoscopo.new(query)
+        data = horoscopo.execute
       when /^dato/
         dato = Dato.new
         data = dato.execute
