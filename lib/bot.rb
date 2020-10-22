@@ -56,6 +56,14 @@ Telegram::Bot::Client.run(token) do |bot|
           chat_id: message.chat.id,
           text: data
         )
+      when /^saldobip\s+.*$/
+        query = message.text.split(' ')[1..-1].join(' ')
+        saldobip = SaldoBip.new(query)
+        data = saldobip.execute
+        bot.api.send_message(
+          chat_id: message.chat.id,
+          text: data
+        )
       else
         puts "Message @#{message.from.username}: #{message.text}"
       end
