@@ -23,8 +23,21 @@ class Paradero
 
   def formatted_response
     paradero = @data['id']
-    hora = @data['horaConsulta']
-    calles = @data['descripcion']
-    "Paradero #{paradero}, en calle #{calles}. Hora de consulta #{hora}"
+    output = ''
+    if paradero != "NULL"
+      hora = @data['horaConsulta']
+      calles = @data['descripcion']
+      output += "Paradero #{paradero}, en calle #{calles}. Hora de consulta #{hora}\n-----------------------------------\n"
+		  @data['servicios'].each do |linea|
+		  	micro = linea['servicio']
+        patente = linea['patente']
+        tiempo = linea['tiempo']
+        distancia = linea['distancia']
+		  	output += "*Linea:* #{micro}\n*Patente* #{patente}\n*Tiempo:* #{tiempo}\n*Distancia:* #{distancia}\n-----------------------------------\n"
+		  end
+    else
+      output += "#{calles}"
+    end
+    output
   end
 end
