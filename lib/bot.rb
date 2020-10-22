@@ -7,6 +7,7 @@ require_relative 'paraderos.rb'
 require_relative 'horoscopo.rb'
 require_relative 'dato.rb'
 require_relative 'temblores.rb'
+require_relative 'saldoBip.rb'
 
 token = ENV['TELEGRAM_TOKEN']
 
@@ -49,6 +50,7 @@ Telegram::Bot::Client.run(token) do |bot|
         bot.api.send_message(
           chat_id: message.chat.id,
           text: data
+          parse_mode: 'Markdown'
         )
       when /^horoscopo\s+.*$/
         query = message.text.split(' ')[1..-1].join(' ')
