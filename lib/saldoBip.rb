@@ -22,19 +22,16 @@ class SaldoBip
     end
   
     def formatted_response
+		  output = ''
 			valida = @data['valida']
 			if valida
 				estado = @data['estadoContrato']
-				saldo = @data['saldoBip']
-				<<~HEREDOC
-					La Tarjeta se encuentra con #{estado},
-					y posee un saldo de #{saldo}.
-				HEREDOC
+        saldo = @data['saldoBip']
+        output += "La Tarjeta se encuentra con #{estado},\ny posee un saldo de #{saldo}."
 			else
-				tipo = @data['tiposContrato']
-				<<~HEREDOC
-        	#{tipo}.
-				HEREDOC
-			end
+        tipo = @data['tiposContrato']
+        output += "#{tipo}"
+      end
+      output
     end
   end
