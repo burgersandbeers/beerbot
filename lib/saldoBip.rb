@@ -3,7 +3,7 @@
 class SaldoBip
     attr_reader :data
   
-    def initialize
+    def initialize(query)
       @data = {}
       @url = "https://api.xor.cl/bip/?n=#{query}"
     end
