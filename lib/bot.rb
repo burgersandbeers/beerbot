@@ -13,7 +13,6 @@ token = ENV['TELEGRAM_TOKEN']
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
-    puts message
     case message
     when '/start'
       bot.api.send_message(
@@ -49,7 +48,7 @@ Telegram::Bot::Client.run(token) do |bot|
         data = paradero.execute
         bot.api.send_message(
           chat_id: message.chat.id,
-          text: data
+          text: data,
           parse_mode: 'Markdown'
         )
       when /^horoscopo\s+.*$/
@@ -84,11 +83,13 @@ Telegram::Bot::Client.run(token) do |bot|
           chat_id: message.chat.id,
           text: data
         )
+      when Telegram::Bot::Types::InlineQuery
+        puts "InlineQuery @#{message.from.username}: #{message.query} and #{message.id}"
       else
-        puts "Message @#{message.from.username}: #{message.text}"
+        puts "Default case"
       end
-    when Telegram::Bot::Types::InlineQuery
-      puts "InlineQuery @#{message.from.username}: #{message.query} and #{message.id}"
     end
+  rescue StandardError => e
+    puts e.message
   end
 end
